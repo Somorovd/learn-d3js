@@ -1,14 +1,15 @@
 "use client";
 
 import ProjectPage from "@/components/project-page";
+import useCSV from "@/hooks/use-csv";
 import * as d3 from "d3";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
 const dataUrl =
   "https://gist.githubusercontent.com/curran/b236990081a24761f7000567094914e0/raw/acd2b8cecfe51c520622fbaf407ee88b8796bfc6/cssNamedColors.csv";
 
 const CssColorProject = () => {
-  const [data, setData] = useState<d3.DSVRowArray<string> | null>(null);
+  const data = useCSV({ dataUrl });
   console.log(data?.columns);
 
   const width = 960;
@@ -29,10 +30,6 @@ const CssColorProject = () => {
     },
     [data]
   );
-
-  useEffect(() => {
-    d3.csv(dataUrl).then(setData);
-  }, []);
 
   return (
     <ProjectPage name="CSS Colors">

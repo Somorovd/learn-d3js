@@ -33,6 +33,14 @@ const Home = () => {
                   CSS Colors
                 </Link>
               </li>
+              <li>
+                <Link
+                  href={"/projects/population-bar-chart"}
+                  className="link in"
+                >
+                  Population Bar Chart
+                </Link>
+              </li>
             </ul>
           </li>
         </ol>
