@@ -21,9 +21,3 @@ body {
 .link:hover {
   text-decoration: underline;
 }
-
-.project-page h1 {
-  text-align: center;
-  font-size: 3rem;
-  margin-bottom: 2rem;
-}

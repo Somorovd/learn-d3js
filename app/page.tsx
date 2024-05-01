@@ -25,7 +25,12 @@ const Home = () => {
             <ul className="list-disc pl-4">
               <li>
                 <Link href={"/projects/face"} className="link in">
-                  Making a Face Pt.1
+                  Making a Face
+                </Link>
+              </li>
+              <li>
+                <Link href={"/projects/css-colors"} className="link in">
+                  CSS Colors
                 </Link>
               </li>
             </ul>
