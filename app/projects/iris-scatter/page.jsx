@@ -2,7 +2,7 @@
 
 import ProjectPage from "@/components/project-page";
 import useCSV from "@/hooks/use-csv";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import * as d3 from "d3";
 
 const dataUrl =
@@ -25,17 +25,15 @@ const IrisScatterPage = () => {
   const data = useCSV({ dataUrl, rowFunc });
   console.log("Data", data, data?.columns);
 
-  if (!data) return <div>Loading...</div>;
-
   // Control Values
   // ------------------------------------------------
   const width = 960;
   const height = 500;
 
-  const margin = { top: 20, right: 20, bottom: 60, left: 90 };
+  const margin = { top: 60, right: 20, bottom: 60, left: 90 };
 
-  const xAxisKey = "sepal_length";
-  const yAxisKey = "sepal_width";
+  const [xAxisKey, setXAxisKey] = useState("sepal_length");
+  const [yAxisKey, setYAxisKey] = useState("sepal_width");
 
   const xAxisLabelOffset = 45;
   const yAxisLabelOffset = 50;
@@ -47,6 +45,11 @@ const IrisScatterPage = () => {
 
   const xValue = (d) => d[xAxisKey];
   const yValue = (d) => d[yAxisKey];
+  const colorValue = (d) => d["species"];
+
+  const labels = ["petal_length", "petal_width", "sepal_length", "sepal_width"];
+
+  if (!data) return <div>Loading...</div>;
 
   const xScale = d3
     .scaleLinear()
@@ -60,14 +63,56 @@ const IrisScatterPage = () => {
     .range([0, innerHeight])
     .nice();
 
+  const colorScale = d3
+    .scaleOrdinal()
+    .domain(data.map(colorValue))
+    .range(["#005D6E", "#F6B656", "#BD2D28"]);
+
   return (
     <ProjectPage name="Iris Scatter">
+      <div className="flex justify-center gap-8 mb-4">
+        <div className="flex gap-4">
+          <label htmlFor="x-axis">X-Axis</label>
+          <select
+            name="x-axis"
+            value={xAxisKey}
+            onChange={(e) => setXAxisKey(e.target.value)}
+          >
+            {labels.map((label) => (
+              <option
+                key={label}
+                value={label}
+              >
+                {label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex gap-4">
+          <label htmlFor="y-axis">X-Axis</label>
+          <select
+            name="y-axis"
+            value={yAxisKey}
+            onChange={(e) => setYAxisKey(e.target.value)}
+          >
+            {labels.map((label) => (
+              <option
+                key={label}
+                value={label}
+              >
+                {label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
       <svg
         width={width}
         height={height}
         style={{ border: "1px solid black" }}
       >
         <g transform={`translate(${margin.left}, ${margin.top})`}>
+          {/* X Axis Ticks */}
           {xScale.ticks().map((tickValue) => (
             <g
               key={tickValue}
@@ -86,6 +131,7 @@ const IrisScatterPage = () => {
               </text>
             </g>
           ))}
+          {/* Y Axis Ticks */}
           {yScale.ticks().map((tickValue) => (
             <g
               key={tickValue}
@@ -103,14 +149,17 @@ const IrisScatterPage = () => {
               </text>
             </g>
           ))}
+          {/* Scatter Points */}
           {data.map((d, i) => (
             <circle
               key={i}
               cx={xScale(xValue(d))}
               cy={yScale(yValue(d))}
+              fill={colorScale(colorValue(d))}
               r={10}
             />
           ))}
+          {/* X Axis Label */}
           <text
             className="text-3xl"
             x={innerWidth / 2}
@@ -120,6 +169,7 @@ const IrisScatterPage = () => {
           >
             {keyToText(xAxisKey)}
           </text>
+          {/* Y Axis Label */}
           <text
             className="text-3xl"
             dy=""
@@ -130,6 +180,24 @@ const IrisScatterPage = () => {
           >
             {keyToText(yAxisKey)}
           </text>
+          {/* Color Legend */}
+          {colorScale.domain().map((val, i) => (
+            <g
+              key={val}
+              transform={`translate(${i * 150}, ${-margin.top / 2})`}
+            >
+              <circle
+                fill={colorScale(val)}
+                r={10}
+              />
+              <text
+                x={20}
+                dy="0.3rem"
+              >
+                {val}
+              </text>
+            </g>
+          ))}
         </g>
       </svg>
     </ProjectPage>
