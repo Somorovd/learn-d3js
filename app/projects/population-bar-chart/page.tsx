@@ -32,12 +32,25 @@ const PopulationBarChartProject = () => {
 
   return (
     <ProjectPage name="Population Bar Chart">
-      <svg width={width} height={height}>
+      <svg
+        width={width}
+        height={height}
+      >
         <g transform={`translate(${margin.left}, ${margin.top})`}>
           {xScale.ticks().map((tickValue) => (
-            <g transform={`translate(${xScale(tickValue)}, 0)`} key={tickValue}>
-              <line y2={innerHeight} stroke="black" />
-              <text y={innerHeight} dy="1rem" style={{ textAnchor: "middle" }}>
+            <g
+              key={tickValue}
+              transform={`translate(${xScale(tickValue)}, 0)`}
+            >
+              <line
+                y2={innerHeight}
+                stroke="black"
+              />
+              <text
+                y={innerHeight}
+                dy="1rem"
+                style={{ textAnchor: "middle" }}
+              >
                 {tickValue}
               </text>
             </g>

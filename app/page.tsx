@@ -41,6 +41,11 @@ const Home = () => {
                   Population Bar Chart
                 </Link>
               </li>
+              <li>
+                <Link href={"/projects/iris-scatter"} className="link in">
+                  Iris Scatter
+                </Link>
+              </li>
             </ul>
           </li>
         </ol>
